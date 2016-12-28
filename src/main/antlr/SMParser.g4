@@ -4,7 +4,7 @@ options { tokenVocab=SMLexer; }
 
 stateMachine : preamble (states+=state)+ ;
 
-preamble  : SM name=ID (elements+=preambleElement) ;
+preamble  : SM name=ID (elements+=preambleElement)* ;
 
 preambleElement : EVENT name=ID #eventDecl
                 | INPUT name=ID COLON type #inputDecl

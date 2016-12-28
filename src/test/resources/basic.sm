@@ -1,0 +1,3 @@
+statemachine basic
+
+start state nothing { }

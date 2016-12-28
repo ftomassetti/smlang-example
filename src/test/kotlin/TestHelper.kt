@@ -7,7 +7,10 @@ import java.util.*
 
 fun lexerForCode(code: String) = SMLexer(ANTLRInputStream(StringReader(code)))
 
-fun lexerForResource(resourceName: String, clazz: Class<Any>) = SMLexer(ANTLRInputStream(clazz.getResourceAsStream("/${resourceName}.mc")))
+fun lexerForResource(resourceName: String, clazz: Class<Any>): SMLexer {
+    val inputStream = clazz.getResourceAsStream("/${resourceName}.sm") ?: throw NullPointerException()
+    return SMLexer(ANTLRInputStream(inputStream))
+}
 
 fun tokensNames(lexer: SMLexer): List<String> {
     val tokens = LinkedList<String>()

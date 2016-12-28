@@ -1,0 +1,8 @@
+statemachine basic
+var a = 0
+
+start state nothing {
+    on entry {
+        a = 1 + 2
+    }
+}
