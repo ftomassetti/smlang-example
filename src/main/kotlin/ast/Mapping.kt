@@ -1,6 +1,7 @@
-package me.tomassetti.minicalc.ast
+package me.tomassetti.smlang.ast
 
-import me.tomassetti.minicalc.MiniCalcParser.*
+import me.tomassetti.smlang.*
+import me.tomassetti.smlang.SMParser.*
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 
@@ -8,7 +9,7 @@ interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
 
-fun MiniCalcFileContext.toAst(considerPosition: Boolean = false) : MiniCalcFile = MiniCalcFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+fun StateMachineContext.toAst(considerPosition: Boolean = false) : MiniCalcFile = MiniCalcFile() //MiniCalcFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 
 fun Token.startPoint() = Point(line, charPositionInLine)
 
@@ -19,7 +20,6 @@ fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
 }
 
 fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
-    is VarDeclarationStatementContext -> VarDeclaration(varDeclaration().assignment().ID().text, varDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -49,6 +49,6 @@ fun BinaryOperationContext.toAst(considerPosition: Boolean = false) : Expression
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class MiniCalcParseTreeToAstMapper : ParseTreeToAstMapper<MiniCalcFileContext, MiniCalcFile> {
-    override fun map(parseTreeNode: MiniCalcFileContext): MiniCalcFile = parseTreeNode.toAst()
+class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, MiniCalcFile> {
+    override fun map(parseTreeNode: StateMachineContext): MiniCalcFile = parseTreeNode.toAst()
 }

@@ -1,13 +1,13 @@
-package me.tomassetti.minicalc.parsing
+package me.tomassetti.smlang.parsing
 
-import me.tomassetti.minicalc.MiniCalcLexer
-import me.tomassetti.minicalc.MiniCalcParser
-import me.tomassetti.minicalc.MiniCalcParser.*
-import me.tomassetti.minicalc.ast.Error
-import me.tomassetti.minicalc.ast.MiniCalcFile
-import me.tomassetti.minicalc.ast.Point
-import me.tomassetti.minicalc.ast.toAst
-import me.tomassetti.minicalc.ast.validate
+import me.tomassetti.smlang.SMLexer
+import me.tomassetti.smlang.SMParser
+import me.tomassetti.smlang.SMParser.*
+import me.tomassetti.smlang.ast.Error
+import me.tomassetti.smlang.ast.MiniCalcFile
+import me.tomassetti.smlang.ast.Point
+import me.tomassetti.smlang.ast.toAst
+import me.tomassetti.smlang.ast.validate
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
@@ -18,7 +18,7 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
 
-data class AntlrParsingResult(val root : MiniCalcFileContext?, val errors: List<me.tomassetti.minicalc.ast.Error>) {
+data class AntlrParsingResult(val root : StateMachineContext?, val errors: List<me.tomassetti.smlang.ast.Error>) {
     fun isCorrect() = errors.isEmpty() && root != null
 }
 
@@ -35,7 +35,7 @@ object MiniCalcAntlrParserFacade {
     fun parse(file: File) : AntlrParsingResult = parse(FileInputStream(file))
 
     fun parse(inputStream: InputStream) : AntlrParsingResult {
-        val lexicalAndSyntaticErrors = LinkedList<me.tomassetti.minicalc.ast.Error>()
+        val lexicalAndSyntaticErrors = LinkedList<me.tomassetti.smlang.ast.Error>()
         val errorListener = object : ANTLRErrorListener {
             override fun reportAmbiguity(p0: Parser?, p1: DFA?, p2: Int, p3: Int, p4: Boolean, p5: BitSet?, p6: ATNConfigSet?) {
                 // Ignored for now
@@ -46,7 +46,7 @@ object MiniCalcAntlrParserFacade {
             }
 
             override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInline: Int, msg: String, ex: RecognitionException?) {
-                lexicalAndSyntaticErrors.add(me.tomassetti.minicalc.ast.Error(msg, Point(line, charPositionInline)))
+                lexicalAndSyntaticErrors.add(me.tomassetti.smlang.ast.Error(msg, Point(line, charPositionInline)))
             }
 
             override fun reportContextSensitivity(p0: Parser?, p1: DFA?, p2: Int, p3: Int, p4: Int, p5: ATNConfigSet?) {
@@ -54,13 +54,13 @@ object MiniCalcAntlrParserFacade {
             }
         }
 
-        val lexer = MiniCalcLexer(ANTLRInputStream(inputStream))
+        val lexer = SMLexer(ANTLRInputStream(inputStream))
         lexer.removeErrorListeners()
         lexer.addErrorListener(errorListener)
-        val parser = MiniCalcParser(CommonTokenStream(lexer))
+        val parser = SMParser(CommonTokenStream(lexer))
         parser.removeErrorListeners()
         parser.addErrorListener(errorListener)
-        val antlrRoot = parser.miniCalcFile()
+        val antlrRoot = parser.stateMachine()
         return AntlrParsingResult(antlrRoot, lexicalAndSyntaticErrors)
     }
 

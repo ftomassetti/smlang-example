@@ -1,4 +1,4 @@
-package me.tomassetti.minicalc.ast
+package me.tomassetti.smlang.ast
 
 import java.util.*
 

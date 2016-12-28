@@ -1,13 +1,13 @@
-package me.tomassetti.minicalc.ast
+package me.tomassetti.smlang.ast
 
-import me.tomassetti.minicalc.parsing.MiniCalcAntlrParserFacade
+import me.tomassetti.smlang.parsing.MiniCalcAntlrParserFacade
 import java.util.*
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
 class ModelTest {
 
-    @test fun transformVarName() {
+    /*@test fun transformVarName() {
         val startTree = MiniCalcFile(listOf(
                 VarDeclaration("A", IntLit("10")),
                 Assignment("A", IntLit("11")),
@@ -37,6 +37,6 @@ class ModelTest {
         val varDeclarations = LinkedList<String>()
         ast.specificProcess(VarDeclaration::class.java, { varDeclarations.add(it.varName) })
         assertEquals(listOf("a", "b", "c"), varDeclarations)
-    }
+    }*/
 
 }

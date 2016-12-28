@@ -1,10 +1,10 @@
-package me.tomassetti.sandy
+package me.tomassetti.smlang
 
 import parseResource
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
-class MiniCalcParserTest {
+class SMParserTest {
 
 
     @org.junit.Test fun parseAdditionAssignment() {

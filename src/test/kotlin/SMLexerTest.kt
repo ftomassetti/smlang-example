@@ -1,4 +1,4 @@
-package me.tomassetti.minicalc
+package me.tomassetti.smlang
 
 import lexerForCode
 import tokensContent
@@ -6,7 +6,7 @@ import tokensNames
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
-class MiniCalcLexerTest {
+class SMLexerTest {
 
     @org.junit.Test fun parseVarDeclarationAssignedAnIntegerLiteral() {
         assertEquals(listOf("VAR", "ID", "ASSIGN", "INTLIT", "EOF"),

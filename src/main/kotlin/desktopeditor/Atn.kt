@@ -1,4 +1,4 @@
-package me.tomassetti.minicalc.desktopeditor
+package me.tomassetti.smlang.desktopeditor
 
 import org.antlr.v4.runtime.Vocabulary
 import org.antlr.v4.runtime.atn.*

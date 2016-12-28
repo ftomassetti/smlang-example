@@ -1,4 +1,4 @@
-package me.tomassetti.minicalc.ast
+package me.tomassetti.smlang.ast
 
 import java.util.*
 import kotlin.reflect.KParameter
@@ -76,7 +76,7 @@ fun Node.transform(operation: (Node) -> Node) : Node {
 // MiniCalc specific part
 //
 
-data class MiniCalcFile(val statements : List<Statement>, override val position: Position? = null) : Node
+data class MiniCalcFile(/*val statements : List<Statement>,*/ override val position: Position? = null) : Node
 
 interface Statement : Node { }
 

@@ -1,4 +1,4 @@
-package me.tomassetti.minicalc.desktopeditor
+package me.tomassetti.smlang.desktopeditor
 
 import org.fife.ui.autocomplete.*
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument
