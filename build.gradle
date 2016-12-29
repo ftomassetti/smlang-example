@@ -2,6 +2,7 @@ buildscript {
    ext.kotlin_version = '1.0.6'
 
    repositories {
+     mavenLocal()
      mavenCentral()
      maven {
         name 'JFrog OSS snapshot repo'
@@ -20,6 +21,7 @@ apply plugin: 'idea'
 apply plugin: 'antlr'
 
 repositories {
+  mavenLocal()
   mavenCentral()
   jcenter()
 }
@@ -35,6 +37,7 @@ dependencies {
 
   compile 'com.fifesoft:rsyntaxtextarea:2.5.8'
   compile 'com.fifesoft:autocomplete:2.5.8'
+  compile 'me.tomassetti:kanvas:0.1'
 }
 
 generateGrammarSource {
