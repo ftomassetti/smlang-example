@@ -19,14 +19,37 @@ object smLangSyntaxScheme : SyntaxScheme(true) {
     override fun getStyle(index: Int): Style {
         val style = Style()
         val color = when (index) {
+            // Types
+            SMLexer.STRING, SMLexer.INT, SMLexer.DECIMAL -> Color(42, 53, 114)
+
+            // Literals
+            SMLexer.STRINGLIT -> Color(21, 175, 36)
+            SMLexer.INTLIT, SMLexer.DECLIT -> Color.BLUE
+
+            // Comments
+            SMLexer.COMMENT -> Color(170, 181, 171)
+
+            // Operators
+            SMLexer.ASTERISK, SMLexer.DIVISION, SMLexer.PLUS, SMLexer.MINUS -> Color.WHITE
+
+            // Keywords
             SMLexer.VAR -> Color.GREEN
             SMLexer.INPUT -> Color(200, 250, 200)
-            SMLexer.ASSIGN -> Color.GREEN
-            SMLexer.ASTERISK, SMLexer.DIVISION, SMLexer.PLUS, SMLexer.MINUS -> Color.WHITE
-            SMLexer.INTLIT, SMLexer.DECLIT -> Color.BLUE
-            SMLexer.UNMATCHED -> Color.RED
+            SMLexer.SM -> Color(200, 250, 200)
+            SMLexer.EVENT -> Color(200, 250, 200)
+            SMLexer.AS -> Color(50, 12, 96)
+
+            // Identifiers
             SMLexer.ID -> Color.MAGENTA
+
+            // Separators
+            SMLexer.ARROW -> Color(50, 12, 96)
+            SMLexer.COLON -> Color(50, 12, 96)
+            SMLexer.ASSIGN -> Color(50, 12, 96)
             SMLexer.LPAREN, SMLexer.RPAREN -> Color.WHITE
+
+            // Rest
+            SMLexer.UNMATCHED -> Color.RED
             else -> null
         }
         if (color != null) {
