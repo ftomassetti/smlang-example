@@ -7,6 +7,7 @@ import me.tomassetti.kanvas.PropositionProvider
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
 import org.antlr.v4.runtime.Lexer
+import org.antlr.v4.runtime.Token
 import org.fife.ui.autocomplete.BasicCompletion
 import org.fife.ui.autocomplete.Completion
 import org.fife.ui.autocomplete.CompletionProvider
@@ -70,7 +71,8 @@ object smLangSupport : LanguageSupport {
         get() = ParserData(SMParser.ruleNames, SMParser.VOCABULARY, SMParser._ATN)
     override val propositionProvider: PropositionProvider
         get() = object : PropositionProvider {
-            override fun fromTokenType(completionProvider: CompletionProvider, tokenType: Int): List<Completion> {
+            override fun fromTokenType(completionProvider: CompletionProvider,
+                                       preecedingTokens: List<Token>, tokenType: Int): List<Completion> {
                 val res = LinkedList<Completion>()
                 var proposition : String? = this@smLangSupport.parserData!!.vocabulary.getLiteralName(tokenType)
                 if (proposition != null) {
@@ -81,7 +83,16 @@ object smLangSupport : LanguageSupport {
                 } else {
                     when (tokenType) {
                         SMParser.ID -> {
-                            res.add(BasicCompletion(completionProvider, "someID"))
+                            println("PRE $preecedingTokens")
+                            val determiningToken = preecedingTokens.findLast { setOf(SMLexer.SM, SMLexer.VAR, SMLexer.EVENT, SMLexer.INPUT).contains(it.type) }
+                            val text = when (determiningToken?.type) {
+                                SMLexer.SM -> "aStateMachine"
+                                SMLexer.EVENT -> "anEvent"
+                                SMLexer.INPUT -> "aInput"
+                                SMLexer.VAR -> "aVar"
+                                else -> "someID"
+                            }
+                            res.add(BasicCompletion(completionProvider, text))
                         }
                     }
                 }
