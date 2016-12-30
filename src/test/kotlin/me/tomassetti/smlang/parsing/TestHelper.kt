@@ -1,3 +1,5 @@
+package me.tomassetti.smlang.parsing
+
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
 import org.antlr.v4.runtime.ANTLRInputStream

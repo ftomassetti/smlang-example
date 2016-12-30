@@ -1,6 +1,5 @@
 package me.tomassetti.smlang.ast
 
-import me.tomassetti.smlang.*
 import me.tomassetti.smlang.SMParser.*
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token

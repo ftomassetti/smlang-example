@@ -1,7 +1,7 @@
-package me.tomassetti.smlang
+package me.tomassetti.smlang.parsing
 
-import lexerForCode
-import tokensNames
+import me.tomassetti.smlang.parsing.lexerForCode
+import me.tomassetti.smlang.parsing.tokensNames
 import kotlin.test.assertEquals
 import org.junit.Test as test
 

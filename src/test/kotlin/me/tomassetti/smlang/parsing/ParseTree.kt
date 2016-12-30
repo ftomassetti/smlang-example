@@ -1,4 +1,4 @@
-package me.tomassetti.smlang
+package me.tomassetti.smlang.parsing
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.TerminalNode

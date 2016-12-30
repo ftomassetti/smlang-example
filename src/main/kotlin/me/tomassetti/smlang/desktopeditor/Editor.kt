@@ -1,4 +1,4 @@
-package desktopeditor
+package me.tomassetti.smlang.desktopeditor
 
 import me.tomassetti.kanvas.Kanvas
 import me.tomassetti.kanvas.languageSupportRegistry

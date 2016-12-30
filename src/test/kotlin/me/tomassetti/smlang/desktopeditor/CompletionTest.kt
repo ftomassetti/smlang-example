@@ -1,3 +1,4 @@
+package me.tomassetti.smlang.desktopeditor
 
 import me.tomassetti.kanvas.AntlrAutoCompletionSuggester
 import me.tomassetti.kanvas.EditorContextImpl
