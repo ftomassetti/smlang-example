@@ -1,0 +1,27 @@
+statemachine mySm
+
+input lowSpeedThroughtput: Int
+input highSpeedThroughtput: Int
+
+var totalProduction = 0
+
+event turnOff
+event turnOn
+event speedUp
+event speedDown
+event emergencyStop
+event doNothing
+
+start state turnedOff {
+   on turnOn -> turnedOn
+}
+
+state turnedOn {
+}
+
+state lowSpeed {
+}
+
+state highSpeed {
+}
+

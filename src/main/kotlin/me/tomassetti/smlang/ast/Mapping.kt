@@ -8,7 +8,10 @@ interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
 
-fun StateMachineContext.toAst(considerPosition: Boolean = false) : MiniCalcFile = MiniCalcFile() //MiniCalcFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+fun StateMachineContext.toAst(considerPosition: Boolean = false) : StateMachine = StateMachine(
+        this.preamble().elements.filter { it is InputDeclContext } .map { (it as InputDeclContext).toAst(considerPosition) },
+        this.preamble().elements.filter { it is VarDeclContext } .map { (it as VarDeclContext).toAst(considerPosition) },
+        toPosition(considerPosition))
 
 fun Token.startPoint() = Point(line, charPositionInLine)
 
@@ -17,6 +20,9 @@ fun Token.endPoint() = Point(line, charPositionInLine + text.length)
 fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
     return if (considerPosition) Position(start.startPoint(), stop.endPoint()) else null
 }
+
+fun VarDeclContext.toAst(considerPosition: Boolean = false) : VarDeclaration = VarDeclaration(this.name.text, this.initialValue.toAst(considerPosition), toPosition(considerPosition))
+fun InputDeclContext.toAst(considerPosition: Boolean = false) : InputDeclaration = InputDeclaration(this.name.text, this.type().toAst(considerPosition), toPosition(considerPosition))
 
 fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
     is AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
@@ -48,6 +54,6 @@ fun BinaryOperationContext.toAst(considerPosition: Boolean = false) : Expression
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, MiniCalcFile> {
-    override fun map(parseTreeNode: StateMachineContext): MiniCalcFile = parseTreeNode.toAst()
+class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, StateMachine> {
+    override fun map(parseTreeNode: StateMachineContext): StateMachine = parseTreeNode.toAst()
 }

@@ -12,5 +12,4 @@ fun main(args: Array<String>) {
         kanvas.createAndShowKanvasGUI()
         kanvas.addTab("My SM", languageSupport = smLangSupport)
     }
-
 }

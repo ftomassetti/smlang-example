@@ -40,4 +40,6 @@ fun tokensContent(lexer: SMLexer): List<String> {
 
 fun parse(lexer: SMLexer) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexer)).stateMachine()
 
+fun parseCode(code: String) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForCode(code))).stateMachine()
+
 fun parseResource(resourceName: String, clazz: Class<Any>) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForResource(resourceName, clazz))).stateMachine()

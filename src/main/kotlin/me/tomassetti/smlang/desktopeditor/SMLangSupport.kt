@@ -1,11 +1,11 @@
 package me.tomassetti.smlang.desktopeditor
 
-import me.tomassetti.kanvas.AntlrLexerFactory
-import me.tomassetti.kanvas.LanguageSupport
-import me.tomassetti.kanvas.ParserData
-import me.tomassetti.kanvas.PropositionProvider
+import me.tomassetti.kanvas.*
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
+import me.tomassetti.smlang.ast.length
+import me.tomassetti.smlang.ast.offset
+import me.tomassetti.smlang.parsing.SMLangParserFacade
 import org.antlr.v4.runtime.Lexer
 import org.antlr.v4.runtime.Token
 import org.fife.ui.autocomplete.BasicCompletion
@@ -83,7 +83,6 @@ object smLangSupport : LanguageSupport {
                 } else {
                     when (tokenType) {
                         SMParser.ID -> {
-                            println("PRE $preecedingTokens")
                             val determiningToken = preecedingTokens.findLast { setOf(SMLexer.SM, SMLexer.VAR, SMLexer.EVENT, SMLexer.INPUT).contains(it.type) }
                             val text = when (determiningToken?.type) {
                                 SMLexer.SM -> "aStateMachine"
@@ -99,4 +98,23 @@ object smLangSupport : LanguageSupport {
                 return res
             }
         }
+    override val validator: Validator
+        get() = object : Validator {
+            override fun validate(code: String): List<Issue> {
+                println("VALIDATE INVOKED <<<"+code+">>>")
+                val issues = SMLangParserFacade.parse(code).errors.map { Issue(IssueType.ERROR, it.message,
+                        it.position.start.line, it.position.start.offset(code), it.position.length(code)) }
+                println(issues)
+                return issues
+            }
+        }
+}
+
+object defaultSmLangSupport : BaseLanguageSupport() {
+    override val antlrLexerFactory: AntlrLexerFactory
+        get() = object : AntlrLexerFactory {
+            override fun create(code: String): Lexer = SMLexer(org.antlr.v4.runtime.ANTLRInputStream(code))
+        }
+    override val parserData: ParserData?
+        get() = ParserData(SMParser.ruleNames, SMParser.VOCABULARY, SMParser._ATN)
 }

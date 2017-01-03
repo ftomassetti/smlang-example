@@ -1,11 +1,9 @@
-package me.tomassetti.smlang
+package me.tomassetti.smlang.parsing
 
-import me.tomassetti.smlang.parsing.parseResource
-import me.tomassetti.smlang.parsing.toParseTree
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
-class SMParserTest {
+class ParseTreeShapeTest {
 
     @org.junit.Test fun parseBasicSm() {
         assertEquals(

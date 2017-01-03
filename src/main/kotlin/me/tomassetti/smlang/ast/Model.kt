@@ -1,5 +1,6 @@
 package me.tomassetti.smlang.ast
 
+import jdk.internal.util.xml.impl.Input
 import java.util.*
 import kotlin.reflect.KParameter
 import kotlin.reflect.memberProperties
@@ -21,7 +22,14 @@ data class Point(val line: Int, val column: Int) {
     override fun toString() = "Line $line, Column $column"
 }
 
+fun Point.offset(code: String) : Int {
+    val lines = code.split("\n")
+    return lines.subList(0, this.line - 1).foldRight(0, { it, acc -> it.length + acc }) + column
+}
+
 data class Position(val start: Point, val end: Point)
+
+fun Position.length(code: String) = end.offset(code) - start.offset(code)
 
 fun pos(startLine:Int, startCol:Int, endLine:Int, endCol:Int) = Position(Point(startLine,startCol),Point(endLine,endCol))
 
@@ -73,10 +81,21 @@ fun Node.transform(operation: (Node) -> Node) : Node {
 }
 
 //
-// MiniCalc specific part
+// SMLang specific part
 //
 
-data class MiniCalcFile(/*val statements : List<Statement>,*/ override val position: Position? = null) : Node
+data class StateMachine(val inputs : List<InputDeclaration>, val variables : List<VarDeclaration>,  override val position: Position? = null) : Node
+
+//
+// Preamble
+//
+
+data class InputDeclaration(val inputName: String, val type: Type, override val position: Position? = null) : Node
+data class VarDeclaration(val varName: String, val value: Expression, override val position: Position? = null) : Node
+
+//
+//
+//
 
 interface Statement : Node { }
 
@@ -122,8 +141,6 @@ data class DecLit(val value: String, override val position: Position? = null) : 
 //
 // Statements
 //
-
-data class VarDeclaration(val varName: String, val value: Expression, override val position: Position? = null) : Statement
 
 data class Assignment(val varName: String, val value: Expression, override val position: Position? = null) : Statement
 

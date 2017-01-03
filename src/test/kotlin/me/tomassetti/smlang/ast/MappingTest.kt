@@ -1,6 +1,6 @@
 package me.tomassetti.smlang.ast
 
-import me.tomassetti.smlang.parsing.MiniCalcAntlrParserFacade
+import me.tomassetti.smlang.parsing.SMLangAntlrParserFacade
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
