@@ -1,12 +1,12 @@
 package me.tomassetti.smlang.ast
 
+import me.tomassetti.antlr.model.Node
+import me.tomassetti.antlr.model.ParseTreeToAstMapper
+import me.tomassetti.antlr.model.Point
+import me.tomassetti.antlr.model.Position
 import me.tomassetti.smlang.SMParser.*
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
-
-interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
-    fun map(parseTreeNode: PTN) : ASTN
-}
 
 fun StateMachineContext.toAst(considerPosition: Boolean = false) : StateMachine = StateMachine(
         this.preamble().elements.filter { it is InputDeclContext } .map { (it as InputDeclContext).toAst(considerPosition) },

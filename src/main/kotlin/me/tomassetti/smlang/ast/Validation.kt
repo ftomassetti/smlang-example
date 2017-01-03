@@ -1,9 +1,9 @@
 package me.tomassetti.smlang.ast
 
-import javafx.geometry.Pos
+import me.tomassetti.antlr.model.Position
+import me.tomassetti.antlr.model.specificProcess
 import java.util.*
-
-data class Error(val message: String, val position: Position)
+import me.tomassetti.antlr.model.Error
 
 fun StateMachine.validate() : List<Error> {
     println("STATEMACHINE VALIDATE")

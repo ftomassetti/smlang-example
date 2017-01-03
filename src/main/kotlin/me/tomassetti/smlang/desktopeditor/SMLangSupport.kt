@@ -3,8 +3,8 @@ package me.tomassetti.smlang.desktopeditor
 import me.tomassetti.kanvas.*
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
-import me.tomassetti.smlang.ast.length
-import me.tomassetti.smlang.ast.offset
+import me.tomassetti.antlr.model.length
+import me.tomassetti.antlr.model.offset
 import me.tomassetti.smlang.parsing.SMLangParserFacade
 import org.antlr.v4.runtime.Lexer
 import org.antlr.v4.runtime.Token
@@ -15,6 +15,7 @@ import org.fife.ui.rsyntaxtextarea.Style
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme
 import java.awt.Color
 import java.util.*
+import me.tomassetti.antlr.model.Error
 
 object smLangSyntaxScheme : SyntaxScheme(true) {
     override fun getStyle(index: Int): Style {

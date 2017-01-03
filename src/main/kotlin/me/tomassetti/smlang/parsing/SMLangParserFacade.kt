@@ -1,5 +1,7 @@
 package me.tomassetti.smlang.parsing
 
+import me.tomassetti.antlr.model.Point
+import me.tomassetti.antlr.model.Position
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
 import me.tomassetti.smlang.SMParser.*
@@ -13,8 +15,9 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
+import me.tomassetti.antlr.model.Error
 
-data class AntlrParsingResult(val root : StateMachineContext?, val errors: List<me.tomassetti.smlang.ast.Error>) {
+data class AntlrParsingResult(val root : StateMachineContext?, val errors: List<Error>) {
     fun isCorrect() = errors.isEmpty() && root != null
 }
 
@@ -31,7 +34,7 @@ object SMLangAntlrParserFacade {
     fun parse(file: File) : AntlrParsingResult = parse(FileInputStream(file))
 
     fun parse(inputStream: InputStream) : AntlrParsingResult {
-        val lexicalAndSyntaticErrors = LinkedList<me.tomassetti.smlang.ast.Error>()
+        val lexicalAndSyntaticErrors = LinkedList<Error>()
         val errorListener = object : ANTLRErrorListener {
             override fun reportAmbiguity(p0: Parser?, p1: DFA?, p2: Int, p3: Int, p4: Boolean, p5: BitSet?, p6: ATNConfigSet?) {
                 // Ignored for now
@@ -49,9 +52,9 @@ object SMLangAntlrParserFacade {
                     println("type ${offendingSymbol.type}")
                     println("offendingSymbol.startPoint ${offendingSymbol.startPoint()}")
                     println("offendingSymbol.endPoint ${offendingSymbol.endPoint()}")
-                    lexicalAndSyntaticErrors.add(me.tomassetti.smlang.ast.Error(msg, Position(Point(line, charPositionInline), Point(offendingSymbol.endPoint().line, offendingSymbol.endPoint().column))))
+                    lexicalAndSyntaticErrors.add(Error(msg, Position(Point(line, charPositionInline), Point(offendingSymbol.endPoint().line, offendingSymbol.endPoint().column))))
                 } else {
-                    lexicalAndSyntaticErrors.add(me.tomassetti.smlang.ast.Error(msg, Position(Point(line, charPositionInline), Point(line, charPositionInline + 1))))
+                    lexicalAndSyntaticErrors.add(Error(msg, Position(Point(line, charPositionInline), Point(line, charPositionInline + 1))))
                 }
             }
 

@@ -1,7 +1,7 @@
 package me.tomassetti.smlang.parsing
 
-import me.tomassetti.smlang.ast.Point
-import me.tomassetti.smlang.ast.Position
+import me.tomassetti.antlr.model.Point
+import me.tomassetti.antlr.model.Position
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
