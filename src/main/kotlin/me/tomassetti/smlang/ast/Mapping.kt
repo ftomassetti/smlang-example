@@ -1,34 +1,63 @@
 package me.tomassetti.smlang.ast
 
-import me.tomassetti.antlr.model.Node
 import me.tomassetti.antlr.model.ParseTreeToAstMapper
-import me.tomassetti.antlr.model.Point
-import me.tomassetti.antlr.model.Position
+import me.tomassetti.antlr.model.toPosition
 import me.tomassetti.smlang.SMParser.*
-import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.Token
+
+class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, StateMachine> {
+    override fun map(parseTreeNode: StateMachineContext): StateMachine = parseTreeNode.toAst()
+}
+
+//
+// StateMachine
+//
 
 fun StateMachineContext.toAst(considerPosition: Boolean = false) : StateMachine = StateMachine(
-        this.preamble().elements.filter { it is InputDeclContext } .map { (it as InputDeclContext).toAst(considerPosition) },
-        this.preamble().elements.filter { it is VarDeclContext } .map { (it as VarDeclContext).toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(InputDeclContext::class.java) .map { it.toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(VarDeclContext::class.java) .map { it.toAst(considerPosition) },
+        this.states.map { it.toAst(considerPosition) },
         toPosition(considerPosition))
 
-fun Token.startPoint() = Point(line, charPositionInLine)
+//
+// Top level elements
+//
 
-fun Token.endPoint() = Point(line, charPositionInLine + text.length)
+fun InputDeclContext.toAst(considerPosition: Boolean = false) : InputDeclaration = InputDeclaration(
+        this.name.text, this.type().toAst(considerPosition), toPosition(considerPosition))
 
-fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
-    return if (considerPosition) Position(start.startPoint(), stop.endPoint()) else null
-}
+fun VarDeclContext.toAst(considerPosition: Boolean = false) : VarDeclaration = VarDeclaration(
+        this.name.text, this.type().toAst(considerPosition), this.initialValue.toAst(considerPosition), toPosition(considerPosition))
 
-fun VarDeclContext.toAst(considerPosition: Boolean = false) : VarDeclaration = VarDeclaration(this.name.text, this.initialValue.toAst(considerPosition), toPosition(considerPosition))
-fun InputDeclContext.toAst(considerPosition: Boolean = false) : InputDeclaration = InputDeclaration(this.name.text, this.type().toAst(considerPosition), toPosition(considerPosition))
+fun EventDeclContext.toAst(considerPosition: Boolean = false) : EventDeclaration = EventDeclaration(
+        this.name.text, toPosition(considerPosition) )
 
-fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
-    is AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
-    is PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
+fun StateContext.toAst(considerPosition: Boolean = false) : StateDeclaration = StateDeclaration(
+        this.name.text, this.start != null, this.blocks.map { it.toAst(considerPosition) }, toPosition(considerPosition))
+
+//
+// StateBlocks
+//
+
+fun StateBlockContext.toAst(considerPosition: Boolean = false) : StateBlock = when (this) {
+    is EntryBlockContext -> OnEntryBlock(this.statements.map { it.toAst(considerPosition) })
+    is ExitBlockContext -> OnExitBlock(this.statements.map { it.toAst(considerPosition) })
+    is TransitionBlockContext -> OnEventBlock(this.eventName.text, this.destinationName.text, toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+//
+// Types
+//
+
+fun TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
+    is IntegerContext -> IntType(toPosition(considerPosition))
+    is DecimalContext -> DecimalType(toPosition(considerPosition))
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+//
+// Expressions
+//
 
 fun ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is BinaryOperationContext -> toAst(considerPosition)
@@ -40,12 +69,6 @@ fun ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = wh
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
-    is IntegerContext -> IntType(toPosition(considerPosition))
-    is DecimalContext -> DecimalType(toPosition(considerPosition))
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
-}
-
 fun BinaryOperationContext.toAst(considerPosition: Boolean = false) : Expression = when (operator.text) {
     "+" -> SumExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
     "-" -> SubtractionExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
@@ -54,6 +77,14 @@ fun BinaryOperationContext.toAst(considerPosition: Boolean = false) : Expression
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, StateMachine> {
-    override fun map(parseTreeNode: StateMachineContext): StateMachine = parseTreeNode.toAst()
+//
+// Statements
+//
+
+
+fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
+    is AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
+    is PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+

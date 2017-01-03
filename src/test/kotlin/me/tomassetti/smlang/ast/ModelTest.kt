@@ -35,7 +35,7 @@ class ModelTest {
                           |print(b)
                           |var c = b * b""".trimMargin("|"))
         val varDeclarations = LinkedList<String>()
-        ast.specificProcess(VarDeclaration::class.java, { varDeclarations.add(it.varName) })
+        ast.specificProcess(VarDeclaration::class.java, { varDeclarations.add(it.name) })
         assertEquals(listOf("a", "b", "c"), varDeclarations)
     }*/
 

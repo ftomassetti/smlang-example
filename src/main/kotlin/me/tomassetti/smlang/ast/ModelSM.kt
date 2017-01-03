@@ -2,33 +2,41 @@ package me.tomassetti.smlang.ast
 
 import me.tomassetti.antlr.model.Node
 import me.tomassetti.antlr.model.Position
-import java.util.*
-import kotlin.reflect.KParameter
-import kotlin.reflect.memberProperties
-import kotlin.reflect.primaryConstructor
 
 //
-// SMLang specific part
+// StateMachine
 //
 
-data class StateMachine(val inputs : List<InputDeclaration>, val variables : List<VarDeclaration>,  override val position: Position? = null) : Node
+data class StateMachine(val inputs: List<InputDeclaration>,
+                        val variables: List<VarDeclaration>,
+                        val states: List<StateDeclaration>,
+                        override val position: Position? = null) : Node
 
 //
-// Preamble
+// Top level elements
 //
 
-data class InputDeclaration(val inputName: String, val type: Type, override val position: Position? = null) : Node
-data class VarDeclaration(val varName: String, val value: Expression, override val position: Position? = null) : Node
+data class InputDeclaration(val name: String, val type: Type, override val position: Position? = null) : Node
+data class VarDeclaration(val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node
+data class EventDeclaration(val name: String, override val position: Position? = null) : Node
+data class StateDeclaration(val name: String, val start: Boolean, val blocks: List<StateBlock>, override val position: Position? = null) : Node
 
 //
-//
+// Interfaces
 //
 
+interface StateBlock : Node { }
 interface Statement : Node { }
-
 interface Expression : Node { }
-
 interface Type : Node { }
+
+//
+// StateBlocks
+//
+
+data class OnEntryBlock(val statements: List<Statement>, override val position: Position? = null) : StateBlock
+data class OnExitBlock(val statements: List<Statement>, override val position: Position? = null) : StateBlock
+data class OnEventBlock(val evenName: String, val destinationName: String, override val position: Position? = null) : StateBlock
 
 //
 // Types
