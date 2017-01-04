@@ -15,6 +15,7 @@ class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, StateMa
 fun StateMachineContext.toAst(considerPosition: Boolean = false) : StateMachine = StateMachine(
         this.preamble().elements.filterIsInstance(InputDeclContext::class.java) .map { it.toAst(considerPosition) },
         this.preamble().elements.filterIsInstance(VarDeclContext::class.java) .map { it.toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(EventDeclContext::class.java) .map { it.toAst(considerPosition) },
         this.states.map { it.toAst(considerPosition) },
         toPosition(considerPosition))
 
@@ -26,7 +27,7 @@ fun InputDeclContext.toAst(considerPosition: Boolean = false) : InputDeclaration
         this.name.text, this.type().toAst(considerPosition), toPosition(considerPosition))
 
 fun VarDeclContext.toAst(considerPosition: Boolean = false) : VarDeclaration = VarDeclaration(
-        this.name.text, this.type().toAst(considerPosition), this.initialValue.toAst(considerPosition), toPosition(considerPosition))
+        this.name.text, this.type()?.toAst(considerPosition), this.initialValue.toAst(considerPosition), toPosition(considerPosition))
 
 fun EventDeclContext.toAst(considerPosition: Boolean = false) : EventDeclaration = EventDeclaration(
         this.name.text, toPosition(considerPosition) )
@@ -63,6 +64,7 @@ fun ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = wh
     is BinaryOperationContext -> toAst(considerPosition)
     is IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is DecimalLiteralContext -> DecLit(text, toPosition(considerPosition))
+    is StringLiteralContext -> StringLit(text, toPosition(considerPosition))
     is ParenExpressionContext -> expression().toAst(considerPosition)
     is VarReferenceContext -> VarReference(text, toPosition(considerPosition))
     is TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))

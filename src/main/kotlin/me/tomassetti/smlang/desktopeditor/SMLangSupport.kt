@@ -15,7 +15,6 @@ import org.fife.ui.rsyntaxtextarea.Style
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme
 import java.awt.Color
 import java.util.*
-import me.tomassetti.antlr.model.Error
 
 object smLangSyntaxScheme : SyntaxScheme(true) {
     override fun getStyle(index: Int): Style {

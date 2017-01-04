@@ -7,12 +7,6 @@ import org.antlr.v4.runtime.CommonTokenStream
 import java.io.StringReader
 import java.util.*
 
-fun lexerForCode(code: String) = SMLexer(ANTLRInputStream(StringReader(code)))
-
-fun lexerForResource(resourceName: String, clazz: Class<Any>): SMLexer {
-    val inputStream = clazz.getResourceAsStream("/${resourceName}.sm") ?: throw NullPointerException()
-    return SMLexer(ANTLRInputStream(inputStream))
-}
 
 fun tokensNames(lexer: SMLexer): List<String> {
     val tokens = LinkedList<String>()
@@ -38,8 +32,3 @@ fun tokensContent(lexer: SMLexer): List<String> {
     return tokens
 }
 
-fun parse(lexer: SMLexer) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexer)).stateMachine()
-
-fun parseCode(code: String) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForCode(code))).stateMachine()
-
-fun parseResource(resourceName: String, clazz: Class<Any>) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForResource(resourceName, clazz))).stateMachine()

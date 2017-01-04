@@ -1,6 +1,6 @@
 package me.tomassetti.antlr.model
 
-import jdk.internal.util.xml.impl.Input
+import java.lang.reflect.ParameterizedType
 import java.util.*
 import kotlin.reflect.KParameter
 import kotlin.reflect.memberProperties
@@ -12,6 +12,26 @@ import kotlin.reflect.primaryConstructor
 
 interface Node {
     val position: Position?
+}
+
+fun Node.multilineString(indent: String = "") : String {
+    val sb = StringBuffer()
+    sb.append("${indent}${this.javaClass.simpleName}{\n")
+    println("___$this")
+    this.javaClass.kotlin.members.forEach {
+        println(it.returnType)
+    }
+    this.javaClass.methods.forEach {
+        if (it.returnType.equals(List::class.java)) {
+            val paramType = (it.genericReturnType as ParameterizedType).actualTypeArguments[0]
+            if (paramType is Class<*> && Node::class.java.isAssignableFrom(paramType)) {
+                //println(" L " + paramType)
+            }
+        }
+        //println(it.returnType.toString() + " "+it+ " "+it.returnType.equals(List::class.java)) }
+    }
+    sb.append("${indent}}\n")
+    return sb.toString()
 }
 
 fun Node.isBefore(other: Node) : Boolean = position!!.start.isBefore(other.position!!.start)

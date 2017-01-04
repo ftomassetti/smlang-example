@@ -33,7 +33,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | ID                                                            # varReference
            | MINUS expression                                              # minusExpression
            | INTLIT                                                        # intLiteral
-           | DECLIT                                                        # decimalLiteral ;
+           | DECLIT                                                        # decimalLiteral
+           | STRINGLIT                                                     # stringLiteral ;
 
 type : INT     # integer
      | DECIMAL # decimal ;

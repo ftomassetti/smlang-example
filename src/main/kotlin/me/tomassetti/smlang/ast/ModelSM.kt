@@ -9,6 +9,7 @@ import me.tomassetti.antlr.model.Position
 
 data class StateMachine(val inputs: List<InputDeclaration>,
                         val variables: List<VarDeclaration>,
+                        val events: List<EventDeclaration>,
                         val states: List<StateDeclaration>,
                         override val position: Position? = null) : Node
 
@@ -72,6 +73,8 @@ data class VarReference(val varName: String, override val position: Position? = 
 data class IntLit(val value: String, override val position: Position? = null) : Expression
 
 data class DecLit(val value: String, override val position: Position? = null) : Expression
+
+data class StringLit(val value: String, override val position: Position? = null) : Expression
 
 //
 // Statements

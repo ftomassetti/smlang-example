@@ -1,7 +1,6 @@
 package me.tomassetti.smlang.parsing
 
-import me.tomassetti.antlr.model.Point
-import me.tomassetti.antlr.model.Position
+import me.tomassetti.antlr.model.*
 import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
 import me.tomassetti.smlang.SMParser.*
@@ -15,7 +14,6 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
-import me.tomassetti.antlr.model.Error
 
 data class AntlrParsingResult(val root : StateMachineContext?, val errors: List<Error>) {
     fun isCorrect() = errors.isEmpty() && root != null

@@ -1,5 +1,6 @@
 package me.tomassetti.smlang.parsing
 
+import me.tomassetti.parsing.toParseTree
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
