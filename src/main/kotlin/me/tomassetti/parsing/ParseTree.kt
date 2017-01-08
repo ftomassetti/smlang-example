@@ -1,6 +1,7 @@
 package me.tomassetti.parsing
 
 import org.antlr.v4.runtime.ParserRuleContext
+import org.antlr.v4.runtime.Vocabulary
 import org.antlr.v4.runtime.tree.TerminalNode
 import java.util.*
 
@@ -8,12 +9,12 @@ abstract class ParseTreeElement {
     abstract fun multiLineString(indentation : String = ""): String
 }
 
-class ParseTreeLeaf(val text: String) : ParseTreeElement() {
+class ParseTreeLeaf(val type: String, val text: String) : ParseTreeElement() {
     override fun toString(): String{
-        return "T[$text]"
+        return "T:$type[$text]"
     }
 
-    override fun multiLineString(indentation : String): String = "${indentation}T[$text]\n"
+    override fun multiLineString(indentation : String): String = "${indentation}T:$type[$text]\n"
 }
 
 class ParseTreeNode(val name: String) : ParseTreeElement() {
@@ -35,12 +36,12 @@ class ParseTreeNode(val name: String) : ParseTreeElement() {
     }
 }
 
-fun toParseTree(node: ParserRuleContext) : ParseTreeNode {
+fun toParseTree(node: ParserRuleContext, vocabulary: Vocabulary) : ParseTreeNode {
     val res = ParseTreeNode(node.javaClass.simpleName.removeSuffix("Context"))
     node.children.forEach { c ->
         when (c) {
-            is ParserRuleContext -> res.child(toParseTree(c))
-            is TerminalNode -> res.child(ParseTreeLeaf(c.text))
+            is ParserRuleContext -> res.child(toParseTree(c, vocabulary))
+            is TerminalNode -> res.child(ParseTreeLeaf(vocabulary.getSymbolicName(c.symbol.type), c.text))
         }
     }
     return res

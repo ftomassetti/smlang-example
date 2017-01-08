@@ -16,32 +16,32 @@ class CompletionTest {
 
     @test fun emptyFile() {
         val code = ""
-        assertEquals(setOf(TokenTypeImpl(SM)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(SM)), suggestions(code).proposals)
     }
 
     @test fun afterSmKeyword() {
         val code = "statemachine "
-        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code).proposals)
     }
 
     @test fun afterSmName() {
         val code = "statemachine foo "
-        assertEquals(setOf(TokenTypeImpl(EVENT), TokenTypeImpl(INPUT), TokenTypeImpl(VAR), TokenTypeImpl(START), TokenTypeImpl(STATE)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(EVENT), TokenTypeImpl(INPUT), TokenTypeImpl(VAR), TokenTypeImpl(START), TokenTypeImpl(STATE)), suggestions(code).proposals)
     }
 
     @test fun afterEventKeyword() {
         val code = "statemachine foo event "
-        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code).proposals)
     }
 
     @test fun afterEventDefinition() {
         val code = "statemachine foo event myEvent "
-        assertEquals(setOf(TokenTypeImpl(EVENT), TokenTypeImpl(INPUT), TokenTypeImpl(VAR), TokenTypeImpl(START), TokenTypeImpl(STATE)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(EVENT), TokenTypeImpl(INPUT), TokenTypeImpl(VAR), TokenTypeImpl(START), TokenTypeImpl(STATE)), suggestions(code).proposals)
     }
 
     @test fun afterVarKeyword() {
         val code = "statemachine foo var "
-        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code))
+        assertEquals(setOf(TokenTypeImpl(ID)), suggestions(code).proposals)
     }
 
 //    @test fun afterVarDefinition() {

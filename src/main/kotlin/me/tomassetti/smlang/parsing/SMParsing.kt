@@ -4,6 +4,7 @@ import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.SMParser
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.ParserRuleContext
 import java.io.StringReader
 
 fun lexerForCode(code: String) = SMLexer(ANTLRInputStream(StringReader(code)))
@@ -18,3 +19,5 @@ fun parse(lexer: SMLexer) : SMParser.StateMachineContext = SMParser(CommonTokenS
 fun parseCode(code: String) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForCode(code))).stateMachine()
 
 fun parseResource(resourceName: String, clazz: Class<Any>) : SMParser.StateMachineContext = SMParser(CommonTokenStream(lexerForResource(resourceName, clazz))).stateMachine()
+
+fun toParseTree(node: ParserRuleContext) = me.tomassetti.parsing.toParseTree(node, SMParser.VOCABULARY)

@@ -3,6 +3,7 @@ package me.tomassetti.antlr.model
 import java.lang.reflect.ParameterizedType
 import java.util.*
 import kotlin.reflect.KParameter
+import kotlin.reflect.jvm.javaType
 import kotlin.reflect.memberProperties
 import kotlin.reflect.primaryConstructor
 
@@ -14,23 +15,32 @@ interface Node {
     val position: Position?
 }
 
+const val indentBlock = "  "
+
 fun Node.multilineString(indent: String = "") : String {
     val sb = StringBuffer()
-    sb.append("${indent}${this.javaClass.simpleName}{\n")
-    println("___$this")
-    this.javaClass.kotlin.members.forEach {
-        println(it.returnType)
-    }
-    this.javaClass.methods.forEach {
-        if (it.returnType.equals(List::class.java)) {
-            val paramType = (it.genericReturnType as ParameterizedType).actualTypeArguments[0]
+    sb.append("$indent${this.javaClass.simpleName} {\n")
+    this.javaClass.kotlin.memberProperties.filter { !it.name.startsWith("component") && !it.name.equals("position") }.forEach {
+        val mt = it.returnType.javaType
+        if (mt is ParameterizedType && mt.rawType.equals(List::class.java)){
+            val paramType = mt.actualTypeArguments[0]
             if (paramType is Class<*> && Node::class.java.isAssignableFrom(paramType)) {
-                //println(" L " + paramType)
+                sb.append("$indent$indentBlock${it.name} = [\n")
+                (it.get(this) as List<out Node>).forEach { sb.append(it.multilineString(indent + indentBlock + indentBlock)) }
+                sb.append("$indent$indentBlock]\n")
+            }
+        } else {
+            val value = it.get(this)
+            if (value is Node) {
+                sb.append("$indent$indentBlock${it.name} = [\n")
+                sb.append(value.multilineString(indent + indentBlock + indentBlock))
+                sb.append("$indent$indentBlock]\n")
+            } else {
+                sb.append("$indent$indentBlock${it.name} = ${it.get(this)}\n")
             }
         }
-        //println(it.returnType.toString() + " "+it+ " "+it.returnType.equals(List::class.java)) }
     }
-    sb.append("${indent}}\n")
+    sb.append("$indent}\n")
     return sb.toString()
 }
 
