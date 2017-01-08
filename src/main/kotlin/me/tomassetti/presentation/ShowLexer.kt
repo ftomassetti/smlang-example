@@ -31,6 +31,7 @@ fun main(args: Array<String>) {
     do {
         token = lexer.nextToken()
         val typeName = SMLexer.VOCABULARY.getSymbolicName(token.type)
-        println("L${token.line}(${token.startIndex}-${token.stopIndex}) $typeName '${token.text}'")
+        val text = token.text.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
+        println("L${token.line}(${token.startIndex}-${token.stopIndex}) $typeName '$text'")
     } while (token?.type != -1)
 }
