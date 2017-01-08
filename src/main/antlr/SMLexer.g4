@@ -54,4 +54,3 @@ ARROW              : '->' ;
 STRINGLIT          : '"' ~["]* '"' ;
 
 UNMATCHED          : . ;
-
