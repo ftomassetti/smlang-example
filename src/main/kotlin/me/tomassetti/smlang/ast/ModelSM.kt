@@ -1,5 +1,6 @@
 package me.tomassetti.smlang.ast
 
+import me.tomassetti.antlr.model.Named
 import me.tomassetti.antlr.model.Node
 import me.tomassetti.antlr.model.Position
 import me.tomassetti.antlr.model.ReferenceByName
@@ -18,10 +19,10 @@ data class StateMachine(val inputs: List<InputDeclaration>,
 // Top level elements
 //
 
-data class InputDeclaration(val name: String, val type: Type, override val position: Position? = null) : Node
-data class VarDeclaration(val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node
-data class EventDeclaration(val name: String, override val position: Position? = null) : Node
-data class StateDeclaration(val name: String, val start: Boolean, val blocks: List<StateBlock>, override val position: Position? = null) : Node
+data class InputDeclaration(override val name: String, val type: Type, override val position: Position? = null) : Node, Named
+data class VarDeclaration(override val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node, Named
+data class EventDeclaration(override val name: String, override val position: Position? = null) : Node, Named
+data class StateDeclaration(override val name: String, val start: Boolean, val blocks: List<StateBlock>, override val position: Position? = null) : Node, Named
 
 //
 // Interfaces

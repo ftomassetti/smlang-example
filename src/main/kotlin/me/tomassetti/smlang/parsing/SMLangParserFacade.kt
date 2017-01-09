@@ -43,13 +43,13 @@ object SMLangAntlrParserFacade {
             }
 
             override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInline: Int, msg: String, ex: RecognitionException?) {
-                println("OFFENDING SYMBOL $offendingSymbol ${offendingSymbol?.javaClass}")
+                //println("OFFENDING SYMBOL $offendingSymbol ${offendingSymbol?.javaClass}")
                 if (offendingSymbol is CommonToken && offendingSymbol.type != -1) {
-                    println("LINE $line")
-                    println("charPositionInline $charPositionInline")
-                    println("type ${offendingSymbol.type}")
-                    println("offendingSymbol.startPoint ${offendingSymbol.startPoint()}")
-                    println("offendingSymbol.endPoint ${offendingSymbol.endPoint()}")
+                    //println("LINE $line")
+                    //println("charPositionInline $charPositionInline")
+                    //println("type ${offendingSymbol.type}")
+                    //println("offendingSymbol.startPoint ${offendingSymbol.startPoint()}")
+                    //println("offendingSymbol.endPoint ${offendingSymbol.endPoint()}")
                     lexicalAndSyntaticErrors.add(Error(msg, Position(Point(line, charPositionInline), Point(offendingSymbol.endPoint().line, offendingSymbol.endPoint().column))))
                 } else {
                     lexicalAndSyntaticErrors.add(Error(msg, Position(Point(line, charPositionInline), Point(line, charPositionInline + 1))))
@@ -84,7 +84,6 @@ object SMLangParserFacade {
         val lexicalAnsSyntaticErrors = antlrParsingResult.errors
         val antlrRoot = antlrParsingResult.root
         val astRoot = if (lexicalAnsSyntaticErrors.isEmpty()) {antlrRoot?.toAst(considerPosition = true) } else { null }
-        println("PARSE ASTROOT=$astRoot")
         val semanticErrors = astRoot?.validate() ?: emptyList()
         return ParsingResult(astRoot, lexicalAnsSyntaticErrors + semanticErrors)
     }

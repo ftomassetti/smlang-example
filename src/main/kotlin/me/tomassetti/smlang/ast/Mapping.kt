@@ -91,4 +91,3 @@ fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when
     is PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
-
