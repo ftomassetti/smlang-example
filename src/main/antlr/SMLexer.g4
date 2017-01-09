@@ -37,6 +37,7 @@ ID                 : [_]*[a-z][A-Za-z0-9_]* ;
 // Literals
 INTLIT             : '0'|[1-9][0-9]* ;
 DECLIT             : '0'|[1-9][0-9]* '.' [0-9]+ ;
+STRINGLIT          : '"' ~["]* '"' ;
 
 // Operators
 PLUS               : '+' ;
@@ -50,7 +51,5 @@ RPAREN             : ')' ;
 LBRACKET           : '{' ;
 RBRACKET           : '}' ;
 ARROW              : '->' ;
-
-STRINGLIT          : '"' ~["]* '"' ;
 
 UNMATCHED          : . ;

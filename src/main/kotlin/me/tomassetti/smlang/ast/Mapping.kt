@@ -1,6 +1,7 @@
 package me.tomassetti.smlang.ast
 
 import me.tomassetti.antlr.model.ParseTreeToAstMapper
+import me.tomassetti.antlr.model.ReferenceByName
 import me.tomassetti.antlr.model.toPosition
 import me.tomassetti.smlang.SMParser.*
 
@@ -42,7 +43,8 @@ fun StateContext.toAst(considerPosition: Boolean = false) : StateDeclaration = S
 fun StateBlockContext.toAst(considerPosition: Boolean = false) : StateBlock = when (this) {
     is EntryBlockContext -> OnEntryBlock(this.statements.map { it.toAst(considerPosition) })
     is ExitBlockContext -> OnExitBlock(this.statements.map { it.toAst(considerPosition) })
-    is TransitionBlockContext -> OnEventBlock(this.eventName.text, this.destinationName.text, toPosition(considerPosition))
+    is TransitionBlockContext -> OnEventBlock(ReferenceByName(this.eventName.text),
+            ReferenceByName(this.destinationName.text), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -66,7 +68,7 @@ fun ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = wh
     is DecimalLiteralContext -> DecLit(text, toPosition(considerPosition))
     is StringLiteralContext -> StringLit(text, toPosition(considerPosition))
     is ParenExpressionContext -> expression().toAst(considerPosition)
-    is VarReferenceContext -> VarReference(text, toPosition(considerPosition))
+    is VarReferenceContext -> VarReference(ReferenceByName(text), toPosition(considerPosition))
     is TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
@@ -83,9 +85,9 @@ fun BinaryOperationContext.toAst(considerPosition: Boolean = false) : Expression
 // Statements
 //
 
-
 fun StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
-    is AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
+    is AssignmentStatementContext -> Assignment(ReferenceByName(assignment().ID().text),
+            assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

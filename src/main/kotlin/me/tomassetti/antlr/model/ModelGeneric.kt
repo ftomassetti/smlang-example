@@ -110,3 +110,4 @@ fun Node.transform(operation: (Node) -> Node) : Node {
     return operation(instanceToTransform)
 }
 
+data class ReferenceByName<N : Node>(val name: String, var referred: N? = null)

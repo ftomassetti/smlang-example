@@ -2,6 +2,7 @@ package me.tomassetti.smlang.ast
 
 import me.tomassetti.antlr.model.Node
 import me.tomassetti.antlr.model.Position
+import me.tomassetti.antlr.model.ReferenceByName
 
 //
 // StateMachine
@@ -37,7 +38,9 @@ interface Type : Node { }
 
 data class OnEntryBlock(val statements: List<Statement>, override val position: Position? = null) : StateBlock
 data class OnExitBlock(val statements: List<Statement>, override val position: Position? = null) : StateBlock
-data class OnEventBlock(val evenName: String, val destinationName: String, override val position: Position? = null) : StateBlock
+data class OnEventBlock(val event: ReferenceByName<EventDeclaration>,
+                        val destination: ReferenceByName<StateDeclaration>,
+                        override val position: Position? = null) : StateBlock
 
 //
 // Types
@@ -68,7 +71,8 @@ data class UnaryMinusExpression(val value: Expression, override val position: Po
 
 data class TypeConversion(val value: Expression, val targetType: Type, override val position: Position? = null) : Expression
 
-data class VarReference(val varName: String, override val position: Position? = null) : Expression
+data class VarReference(val variable: ReferenceByName<VarDeclaration>,
+                        override val position: Position? = null) : Expression
 
 data class IntLit(val value: String, override val position: Position? = null) : Expression
 
@@ -80,6 +84,7 @@ data class StringLit(val value: String, override val position: Position? = null)
 // Statements
 //
 
-data class Assignment(val varName: String, val value: Expression, override val position: Position? = null) : Statement
+data class Assignment(val variable: ReferenceByName<VarDeclaration>, val value: Expression,
+                      override val position: Position? = null) : Statement
 
 data class Print(val value: Expression, override val position: Position? = null) : Statement

@@ -31,9 +31,9 @@ class Interpreter(val stateMachine: StateMachine, val inputsValues: Map<InputDec
     }
 
     fun receiveEvent(event: EventDeclaration) {
-        val transition = currentState.blocks.filterIsInstance(OnEventBlock::class.java).first { it.evenName == event.name }
+        val transition = currentState.blocks.filterIsInstance(OnEventBlock::class.java).first { it.event.name == event.name }
         if (transition != null) {
-            enterState(stateMachine.stateByName(transition.destinationName))
+            enterState(stateMachine.stateByName(transition.destination.name))
         }
     }
 
@@ -60,14 +60,14 @@ private fun OnEntryBlock.execute(symbolTable: SymbolTable) {
 private fun  Statement.execute(symbolTable: SymbolTable) {
     when (this) {
         is Print -> println(this.value.evaluate(symbolTable))
-        is Assignment -> symbolTable.writeByName(this.varName, this.value.evaluate(symbolTable))
+        is Assignment -> symbolTable.writeByName(this.variable.name, this.value.evaluate(symbolTable))
         else -> throw UnsupportedOperationException(this.toString())
     }
 }
 
 private fun Expression.evaluate(symbolTable: SymbolTable): Any =
     when (this) {
-        is VarReference -> symbolTable.readByName(this.varName)
+        is VarReference -> symbolTable.readByName(this.variable.name)
         is SumExpression -> {
             val l = this.left.evaluate(symbolTable)
             val r = this.right.evaluate(symbolTable)

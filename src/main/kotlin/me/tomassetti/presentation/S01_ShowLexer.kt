@@ -1,10 +1,7 @@
 package me.tomassetti.presentation
 
-import me.tomassetti.parsing.toParseTree
 import me.tomassetti.smlang.SMLexer
-import me.tomassetti.smlang.SMParser
 import me.tomassetti.smlang.parsing.lexerForCode
-import me.tomassetti.smlang.parsing.parseCode
 import org.antlr.v4.runtime.Token
 
 fun main(args: Array<String>) {

@@ -11,7 +11,7 @@ class ParsingErrorsTest {
         val res = SMLangParserFacade.parse("statemachine sm\n input foo")
         assertEquals(1, res.errors.size)
         assertEquals("mismatched input '<EOF>' expecting ':'", res.errors[0].message)
-        assertEquals(Position(Point(2, 10), Point(2, 10)), res.errors[0].position)
+        assertEquals(Position(Point(2, 10), Point(2, 11)), res.errors[0].position)
     }
 
 }

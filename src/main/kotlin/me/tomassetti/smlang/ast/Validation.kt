@@ -1,12 +1,10 @@
 package me.tomassetti.smlang.ast
 
-import me.tomassetti.antlr.model.Position
 import me.tomassetti.antlr.model.specificProcess
 import java.util.*
 import me.tomassetti.antlr.model.Error
 
 fun StateMachine.validate() : List<Error> {
-    println("STATEMACHINE VALIDATE")
     val errors = LinkedList<Error>()
 
     // check a variable or input is not duplicated
