@@ -30,4 +30,22 @@ class ValidationTest {
         assertEquals("A reference to variable 'b' cannot be resolved", res.errors[0].message)
     }
 
+    @test fun unresolvedStateReference() {
+        val code = """statemachine basic
+                      |event foo
+                      |start state nothing { on foo -> b }""".trimMargin("|")
+        val res = SMLangParserFacade.parse(code)
+        assertEquals(1, res.errors.size)
+        assertEquals("A reference to state 'b' cannot be resolved", res.errors[0].message)
+    }
+
+    @test fun unresolvedEventReference() {
+        val code = """statemachine basic
+                      |start state nothing { on foo -> b }
+                      |state b {}""".trimMargin("|")
+        val res = SMLangParserFacade.parse(code)
+        assertEquals(1, res.errors.size)
+        assertEquals("A reference to event 'foo' cannot be resolved", res.errors[0].message)
+    }
+
 }

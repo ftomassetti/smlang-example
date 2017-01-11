@@ -45,6 +45,16 @@ fun StateMachine.validate() : List<Error> {
             errors.add(Error("An assignment to variable '${it.variable.name}' cannot be resolved", it.position!!))
         }
     }
+    this.specificProcess(OnEventBlock::class.java) {
+        if (!it.event.tryToResolve(this.events)) {
+            errors.add(Error("A reference to event '${it.event.name}' cannot be resolved", it.position!!))
+        }
+    }
+    this.specificProcess(OnEventBlock::class.java) {
+        if (!it.destination.tryToResolve(this.states)) {
+            errors.add(Error("A reference to state '${it.destination.name}' cannot be resolved", it.position!!))
+        }
+    }
 
     // if the type of a variable is declared it has to be the same as the type of the initial value
 
