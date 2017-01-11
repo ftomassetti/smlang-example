@@ -30,10 +30,12 @@ class Interpreter(val stateMachine: StateMachine, val inputsValues: Map<InputDec
         stateMachine.variables.forEach { symbolTable.writeByName(it.name, it.value.evaluate(symbolTable)) }
     }
 
+    fun variableValue(variable: VarDeclaration) = symbolTable.readByName(variable.name)
+
     fun receiveEvent(event: EventDeclaration) {
-        val transition = currentState.blocks.filterIsInstance(OnEventBlock::class.java).first { it.event.name == event.name }
+        val transition = currentState.blocks.filterIsInstance(OnEventBlock::class.java).first { it.event.referred!! == event }
         if (transition != null) {
-            enterState(stateMachine.stateByName(transition.destination.name))
+            enterState(transition.destination.referred!!)
         }
     }
 
