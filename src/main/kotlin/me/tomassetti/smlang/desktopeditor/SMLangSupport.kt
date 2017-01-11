@@ -14,6 +14,7 @@ import org.fife.ui.autocomplete.CompletionProvider
 import org.fife.ui.rsyntaxtextarea.Style
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme
 import java.awt.Color
+import java.awt.Font
 import java.util.*
 
 object smLangSyntaxScheme : SyntaxScheme(true) {
@@ -37,6 +38,8 @@ object smLangSyntaxScheme : SyntaxScheme(true) {
             SMLexer.VAR -> Color.GREEN
             SMLexer.INPUT -> Color(200, 250, 200)
             SMLexer.SM -> Color(200, 250, 200)
+            SMLexer.STATE -> Color(200, 250, 200)
+            SMLexer.START -> Color(250, 220, 200)
             SMLexer.EVENT -> Color(200, 250, 200)
             SMLexer.AS -> Color(50, 12, 96)
 
@@ -89,6 +92,7 @@ object smLangSupport : LanguageSupport {
                                 SMLexer.EVENT -> "anEvent"
                                 SMLexer.INPUT -> "aInput"
                                 SMLexer.VAR -> "aVar"
+                                SMLexer.STATE -> "aState"
                                 else -> "someID"
                             }
                             res.add(BasicCompletion(completionProvider, text))

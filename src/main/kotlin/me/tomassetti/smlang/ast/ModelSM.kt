@@ -9,7 +9,8 @@ import me.tomassetti.antlr.model.ReferenceByName
 // StateMachine
 //
 
-data class StateMachine(val inputs: List<InputDeclaration>,
+data class StateMachine(val name: String,
+                        val inputs: List<InputDeclaration>,
                         val variables: List<VarDeclaration>,
                         val events: List<EventDeclaration>,
                         val states: List<StateDeclaration>,

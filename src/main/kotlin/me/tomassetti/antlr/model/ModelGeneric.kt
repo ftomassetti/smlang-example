@@ -54,7 +54,8 @@ data class Point(val line: Int, val column: Int) {
 
 fun Point.offset(code: String) : Int {
     val lines = code.split("\n")
-    return lines.subList(0, this.line - 1).foldRight(0, { it, acc -> it.length + acc }) + column
+    val newLines = this.line - 1
+    return lines.subList(0, this.line - 1).foldRight(0, { it, acc -> it.length + acc }) + newLines + column
 }
 
 data class Position(val start: Point, val end: Point)
