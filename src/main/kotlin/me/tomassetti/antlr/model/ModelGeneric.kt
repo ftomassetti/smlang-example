@@ -111,7 +111,15 @@ fun Node.transform(operation: (Node) -> Node) : Node {
     return operation(instanceToTransform)
 }
 
-data class ReferenceByName<N>(val name: String, var referred: N? = null) where N : Named, N : Node
+data class ReferenceByName<N>(val name: String, var referred: N? = null) where N : Named, N : Node {
+    override fun toString(): String {
+        if (referred == null) {
+            return "Ref($name)[Unsolved]"
+        } else {
+            return "Ref($name)[Solved]"
+        }
+    }
+}
 
 fun <N> ReferenceByName<N>.tryToResolve(candidates: List<N>) : Boolean where N : Named, N : Node {
     val res = candidates.find { it.name.equals(this.name) }

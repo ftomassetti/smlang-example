@@ -4,26 +4,28 @@ import me.tomassetti.smlang.SMLexer
 import me.tomassetti.smlang.parsing.lexerForCode
 import org.antlr.v4.runtime.Token
 
+
+
 fun main(args: Array<String>) {
-    val lexer = lexerForCode("""
-            statemachine mySm
-
-            input lowSpeedThroughtput: Int
-            input highSpeedThroughtput: Int
-
-            var totalProduction = 0
-
-            event turnOff
-            event turnOn
-            event speedUp
-            event speedDown
-            event emergencyStop
-            event doNothing
-
-
-            start state turnedOff {
-                on turnOn -> turnedOn
-            }""")
+//    val code = """
+//            |statemachine mySm
+//            |
+//            |input lowSpeedThroughtput: Int
+//            |input highSpeedThroughtput: Int
+//            |
+//            |var totalProduction = 0
+//            |
+//            |event turnOff
+//            |event turnOn
+//            |event speedUp
+//            |event speedDown
+//            |event emergencyStop
+//            |event doNothing
+//            |
+//            |start state turnedOff {
+//            |    on turnOn -> turnedOn
+//            |}""".trimMargin("|")
+    val lexer = lexerForCode(readExampleCode())
     var token : Token? = null
     do {
         token = lexer.nextToken()
