@@ -83,41 +83,47 @@ fun startSimulation(stateMachine : StateMachine, window: Window, inputValues: Ma
 fun simulate(stateMachine : StateMachine, window: Window) {
     val inputsDialog = object : JDialog(window, "Simulate ${stateMachine.name}: getting inputs") {
         init {
-            val layout = GridBagLayout()
-            contentPane.layout = layout
+            if (stateMachine.inputs.isEmpty()) {
+                startSimulation(stateMachine, window, emptyMap())
 
-            val c = GridBagConstraints()
-            val spinnersMap = HashMap<InputDeclaration, JSpinner>()
-            c.fill = GridBagConstraints.BOTH
-            c.ipadx = 10
-            c.ipady = 10
-            c.insets = Insets(10, 10, 10, 10)
-            c.gridx = 0
-            c.gridy = 0
-            c.gridwidth = 1
-            c.gridheight = 1
-            stateMachine.inputs.forEach {
+            } else {
+
+                val layout = GridBagLayout()
+                contentPane.layout = layout
+
+                val c = GridBagConstraints()
+                val spinnersMap = HashMap<InputDeclaration, JSpinner>()
+                c.fill = GridBagConstraints.BOTH
+                c.ipadx = 10
+                c.ipady = 10
+                c.insets = Insets(10, 10, 10, 10)
                 c.gridx = 0
-                contentPane.add(JLabel(it.name), c)
-                c.gridx = 1
-                val spinner = JSpinner()
-                spinnersMap[it] = spinner
-                contentPane.add(spinner, c)
-                c.gridy = c.gridy + 1
-            }
-            c.gridx = 0
-            val submit = JButton("Submit")
-            contentPane.add(submit, c)
-            submit.addActionListener {
-                val inputValues = HashMap<InputDeclaration, Any>()
-                spinnersMap.forEach { s, jSpinner -> inputValues[s] = jSpinner.value }
-                this.isVisible = false
-                startSimulation(stateMachine, window, inputValues)
-            }
+                c.gridy = 0
+                c.gridwidth = 1
+                c.gridheight = 1
+                stateMachine.inputs.forEach {
+                    c.gridx = 0
+                    contentPane.add(JLabel(it.name), c)
+                    c.gridx = 1
+                    val spinner = JSpinner()
+                    spinnersMap[it] = spinner
+                    contentPane.add(spinner, c)
+                    c.gridy = c.gridy + 1
+                }
+                c.gridx = 0
+                val submit = JButton("Submit")
+                contentPane.add(submit, c)
+                submit.addActionListener {
+                    val inputValues = HashMap<InputDeclaration, Any>()
+                    spinnersMap.forEach { s, jSpinner -> inputValues[s] = jSpinner.value }
+                    this.isVisible = false
+                    startSimulation(stateMachine, window, inputValues)
+                }
 
-            this.pack()
-            this.isResizable = false
-            this.isVisible = true
+                this.pack()
+                this.isResizable = false
+                this.isVisible = true
+            }
         }
     }
 

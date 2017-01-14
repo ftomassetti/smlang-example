@@ -11,7 +11,7 @@ class SymbolTable {
     private val values = HashMap<String, Any>()
     fun readByName(name: String) : Any {
         if (!values.containsKey(name)) {
-            throw RuntimeException("Unknown symbol $name")
+            throw RuntimeException("Unknown symbol $name. Known symbols: ${values.keys}")
         }
         return values[name]!!
     }
@@ -25,9 +25,9 @@ class Interpreter(val stateMachine: StateMachine, val inputsValues: Map<InputDec
     val symbolTable = SymbolTable()
 
     init {
-        executeEntryActions()
         stateMachine.inputs.forEach { symbolTable.writeByName(it.name, inputsValues[it]!!) }
         stateMachine.variables.forEach { symbolTable.writeByName(it.name, it.value.evaluate(symbolTable)) }
+        executeEntryActions()
     }
 
     fun variableValue(variable: VarDeclaration) = symbolTable.readByName(variable.name)
@@ -69,7 +69,7 @@ private fun  Statement.execute(symbolTable: SymbolTable) {
 
 private fun Expression.evaluate(symbolTable: SymbolTable): Any =
     when (this) {
-        is VarReference -> symbolTable.readByName(this.variable.name)
+        is ValueReference -> symbolTable.readByName(this.symbol.name)
         is SumExpression -> {
             val l = this.left.evaluate(symbolTable)
             val r = this.right.evaluate(symbolTable)

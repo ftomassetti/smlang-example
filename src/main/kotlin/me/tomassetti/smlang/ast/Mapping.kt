@@ -69,7 +69,7 @@ fun ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = wh
     is DecimalLiteralContext -> DecLit(text, toPosition(considerPosition))
     is StringLiteralContext -> StringLit(text, toPosition(considerPosition))
     is ParenExpressionContext -> expression().toAst(considerPosition)
-    is VarReferenceContext -> VarReference(ReferenceByName(text), toPosition(considerPosition))
+    is VarReferenceContext -> ValueReference(ReferenceByName(text), toPosition(considerPosition))
     is TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

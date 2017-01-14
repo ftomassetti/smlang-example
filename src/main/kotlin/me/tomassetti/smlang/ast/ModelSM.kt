@@ -20,8 +20,10 @@ data class StateMachine(val name: String,
 // Top level elements
 //
 
-data class InputDeclaration(override val name: String, val type: Type, override val position: Position? = null) : Node, Named
-data class VarDeclaration(override val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node, Named
+interface ValueDeclaration : Node, Named { }
+
+data class InputDeclaration(override val name: String, val type: Type, override val position: Position? = null) : Node, ValueDeclaration
+data class VarDeclaration(override val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node, ValueDeclaration
 data class EventDeclaration(override val name: String, override val position: Position? = null) : Node, Named
 data class StateDeclaration(override val name: String, val start: Boolean, val blocks: List<StateBlock>, override val position: Position? = null) : Node, Named
 
@@ -73,8 +75,8 @@ data class UnaryMinusExpression(val value: Expression, override val position: Po
 
 data class TypeConversion(val value: Expression, val targetType: Type, override val position: Position? = null) : Expression
 
-data class VarReference(val variable: ReferenceByName<VarDeclaration>,
-                        override val position: Position? = null) : Expression
+data class ValueReference(val symbol: ReferenceByName<ValueDeclaration>,
+                          override val position: Position? = null) : Expression
 
 data class IntLit(val value: String, override val position: Position? = null) : Expression
 

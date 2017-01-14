@@ -18,7 +18,7 @@ class ValidationTest {
                       |start state nothing { on entry { a = 1 + 2 } }""".trimMargin("|")
         val res = SMLangParserFacade.parse(code)
         assertEquals(1, res.errors.size)
-        assertEquals("An assignment to variable 'a' cannot be resolved", res.errors[0].message)
+        assertEquals("An assignment to symbol 'a' cannot be resolved", res.errors[0].message)
     }
 
     @test fun unresolvedVarReference() {
@@ -27,7 +27,7 @@ class ValidationTest {
                       |start state nothing { on entry { a = b } }""".trimMargin("|")
         val res = SMLangParserFacade.parse(code)
         assertEquals(1, res.errors.size)
-        assertEquals("A reference to variable 'b' cannot be resolved", res.errors[0].message)
+        assertEquals("A reference to symbol 'b' cannot be resolved", res.errors[0].message)
     }
 
     @test fun unresolvedStateReference() {
