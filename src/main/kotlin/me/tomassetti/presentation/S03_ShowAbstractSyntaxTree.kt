@@ -7,5 +7,5 @@ import me.tomassetti.smlang.parsing.parseCode
 
 fun main(args: Array<String>) {
     val code = readExampleCode()
-    println(SMLangParserFacade.parse(code).root!!.multilineString())
+    println(SMLangParserFacade.parse(code, withValidation = false).root!!.multilineString())
 }

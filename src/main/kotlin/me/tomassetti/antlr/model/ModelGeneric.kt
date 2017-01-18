@@ -58,7 +58,11 @@ fun Point.offset(code: String) : Int {
     return lines.subList(0, this.line - 1).foldRight(0, { it, acc -> it.length + acc }) + newLines + column
 }
 
-data class Position(val start: Point, val end: Point)
+data class Position(val start: Point, val end: Point) {
+    fun text(wholeText: String): String {
+        return wholeText.substring(start.offset(wholeText), end.offset(wholeText))
+    }
+}
 
 fun Position.length(code: String) = end.offset(code) - start.offset(code)
 

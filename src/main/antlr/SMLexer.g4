@@ -16,7 +16,6 @@ VAR                : 'var' ;
 EVENT              : 'event' ;
 
 // Keywords : statements and expressions
-
 PRINT              : 'print';
 AS                 : 'as';
 INT                : 'Int';
@@ -24,7 +23,6 @@ DECIMAL            : 'Decimal';
 STRING             : 'String';
 
 // Keywords : SM
-
 START              : 'start';
 STATE              : 'state';
 ON                 : 'on';

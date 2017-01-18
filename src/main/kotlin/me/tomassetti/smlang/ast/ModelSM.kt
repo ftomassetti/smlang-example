@@ -20,12 +20,29 @@ data class StateMachine(val name: String,
 // Top level elements
 //
 
-interface ValueDeclaration : Node, Named { }
+interface Typed { val type: Type }
 
-data class InputDeclaration(override val name: String, val type: Type, override val position: Position? = null) : Node, ValueDeclaration
-data class VarDeclaration(override val name: String, val type: Type?, val value: Expression, override val position: Position? = null) : Node, ValueDeclaration
-data class EventDeclaration(override val name: String, override val position: Position? = null) : Node, Named
-data class StateDeclaration(override val name: String, val start: Boolean, val blocks: List<StateBlock>, override val position: Position? = null) : Node, Named
+interface ValueDeclaration : Node, Named, Typed { }
+
+data class InputDeclaration(override val name: String,
+                            override val type: Type,
+                            override val position: Position? = null) : ValueDeclaration
+
+data class VarDeclaration(override val name: String,
+                          val explicitype: Type?,
+                          val value: Expression,
+                          override val position: Position? = null) : ValueDeclaration {
+    override val type: Type
+        get() = explicitype ?: value.type()
+}
+
+data class EventDeclaration(override val name: String,
+                            override val position: Position? = null) : Node, Named
+
+data class StateDeclaration(override val name: String,
+                            val start: Boolean,
+                            val blocks: List<StateBlock>,
+                            override val position: Position? = null) : Node, Named
 
 //
 // Interfaces
@@ -53,6 +70,8 @@ data class OnEventBlock(val event: ReferenceByName<EventDeclaration>,
 data class IntType(override val position: Position? = null) : Type
 
 data class DecimalType(override val position: Position? = null) : Type
+
+data class StringType(override val position: Position? = null) : Type
 
 //
 // Expressions

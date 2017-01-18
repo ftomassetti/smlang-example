@@ -17,7 +17,7 @@ start state turnedOff {
 }
 
 state turnedOn {
-    on turnedOff -> turnedOff
+    on turnOff -> turnedOff
     on speedUp -> lowSpeed
 }
 
@@ -36,7 +36,7 @@ state highSpeed {
         totalProduction = totalProduction + highSpeedThroughtput
         print("Producing " + highSpeedThroughtput + " elements (total "+totalProduction+")")
     }
-    on speedDown -> turnedOn
+    on speedDown -> lowSpeed
     on emergencyStop -> turnedOn
     on doNothing -> highSpeed
 }

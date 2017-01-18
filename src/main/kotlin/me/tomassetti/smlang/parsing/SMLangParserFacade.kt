@@ -75,16 +75,20 @@ object SMLangAntlrParserFacade {
 
 object SMLangParserFacade {
 
-    fun parse(code: String) : ParsingResult = parse(code.toStream())
+    fun parse(code: String, withValidation : Boolean = true) : ParsingResult = parse(code.toStream(), withValidation)
 
-    fun parse(file: File) : ParsingResult = parse(FileInputStream(file))
+    fun parse(file: File, withValidation : Boolean = true) : ParsingResult = parse(FileInputStream(file), withValidation)
 
-    fun parse(inputStream: InputStream) : ParsingResult {
+    fun parse(inputStream: InputStream, withValidation : Boolean = true) : ParsingResult {
         val antlrParsingResult = SMLangAntlrParserFacade.parse(inputStream)
         val lexicalAnsSyntaticErrors = antlrParsingResult.errors
         val antlrRoot = antlrParsingResult.root
         val astRoot = if (lexicalAnsSyntaticErrors.isEmpty()) {antlrRoot?.toAst(considerPosition = true) } else { null }
-        val semanticErrors = astRoot?.validate() ?: emptyList()
+        val semanticErrors = if (withValidation) {
+            astRoot?.validate() ?: emptyList()
+        } else {
+            emptyList()
+        }
         return ParsingResult(astRoot, lexicalAnsSyntaticErrors + semanticErrors)
     }
 
