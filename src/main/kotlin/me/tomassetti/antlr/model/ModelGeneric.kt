@@ -126,7 +126,7 @@ data class ReferenceByName<N>(val name: String, var referred: N? = null) where N
 }
 
 fun <N> ReferenceByName<N>.tryToResolve(candidates: List<N>) : Boolean where N : Named, N : Node {
-    val res = candidates.find { it.name.equals(this.name) }
+    val res = candidates.find { it.name == this.name }
     this.referred = res
     return res != null
 }

@@ -5,7 +5,7 @@ import java.util.*
 
 fun checkForDuplicate(elementsByName: MutableMap<String, Int>, errors : MutableList<Error>, named: Named) {
     if (elementsByName.containsKey(named.name)) {
-        errors.add(Error("A symbol or input named '${named.name}' has been already declared at line ${elementsByName[named.name]}",
+        errors.add(Error("A symbol named '${named.name}' has been already declared at line ${elementsByName[named.name]}",
                 (named as Node).position!!))
     } else {
         elementsByName[named.name] = (named as Node).position!!.start.line
@@ -30,7 +30,7 @@ fun StateMachine.validate() : List<Error> {
     }
 
     val statesByName = HashMap<String, Int>()
-    this.specificProcess(EventDeclaration::class.java) {
+    this.specificProcess(StateDeclaration::class.java) {
         checkForDuplicate(statesByName, errors, it)
     }
 

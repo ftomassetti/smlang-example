@@ -2,7 +2,7 @@ parser grammar SMParser;
 
 options { tokenVocab=SMLexer; }
 
-stateMachine : preamble (states+=state)+ ;
+stateMachine : preamble (states+=state)+ EOF ;
 
 preamble  : SM name=ID (elements+=preambleElement)* ;
 
@@ -30,7 +30,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
-           | ID                                                            # varReference
+           | ID                                                            # valueReference
            | MINUS expression                                              # minusExpression
            | INTLIT                                                        # intLiteral
            | DECLIT                                                        # decimalLiteral

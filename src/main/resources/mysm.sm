@@ -40,4 +40,3 @@ state highSpeed {
     on emergencyStop -> turnedOn
     on doNothing -> highSpeed
 }
-
