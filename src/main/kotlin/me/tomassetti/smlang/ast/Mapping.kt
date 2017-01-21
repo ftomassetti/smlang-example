@@ -15,9 +15,9 @@ class SMParseTreeToAstMapper : ParseTreeToAstMapper<StateMachineContext, StateMa
 
 fun StateMachineContext.toAst(considerPosition: Boolean = false) : StateMachine = StateMachine(
         this.preamble().name.text,
-        this.preamble().elements.filterIsInstance(InputDeclContext::class.java) .map { it.toAst(considerPosition) },
-        this.preamble().elements.filterIsInstance(VarDeclContext::class.java) .map { it.toAst(considerPosition) },
-        this.preamble().elements.filterIsInstance(EventDeclContext::class.java) .map { it.toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(InputDeclContext::class.java).map { it.toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(VarDeclContext::class.java).map { it.toAst(considerPosition) },
+        this.preamble().elements.filterIsInstance(EventDeclContext::class.java).map { it.toAst(considerPosition) },
         this.states.map { it.toAst(considerPosition) },
         toPosition(considerPosition))
 

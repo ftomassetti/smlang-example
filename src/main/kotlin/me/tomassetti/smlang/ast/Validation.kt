@@ -16,12 +16,9 @@ fun StateMachine.validate() : List<Error> {
     val errors = LinkedList<Error>()
 
     // check a symbol or input is not duplicated
-    val varsByName = HashMap<String, Int>()
-    this.specificProcess(VarDeclaration::class.java) {
-        checkForDuplicate(varsByName, errors, it)
-    }
-    this.specificProcess(InputDeclaration::class.java) {
-        checkForDuplicate(varsByName, errors, it)
+    val valuesByName = HashMap<String, Int>()
+    this.specificProcess(ValueDeclaration::class.java) {
+        checkForDuplicate(valuesByName, errors, it)
     }
 
     val eventsByName = HashMap<String, Int>()

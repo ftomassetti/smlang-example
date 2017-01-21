@@ -67,9 +67,11 @@ data class OnEventBlock(val event: ReferenceByName<EventDeclaration>,
 // Types
 //
 
-data class IntType(override val position: Position? = null) : Type
+interface NumberType : Type
 
-data class DecimalType(override val position: Position? = null) : Type
+data class IntType(override val position: Position? = null) : NumberType
+
+data class DecimalType(override val position: Position? = null) : NumberType
 
 data class StringType(override val position: Position? = null) : Type
 

@@ -8,9 +8,9 @@ fun main(args: Array<String>) {
     val parsingResult = SMLangParserFacade.parse(code, withValidation = true)
     if (parsingResult.root == null) {
         println("Syntax error: I cannot build the AST")
-    } else {
+    }/* else {
         println(parsingResult.root!!.multilineString())
-    }
+    }*/
     println("=== Validation: total errors ${parsingResult.errors.size} ===")
     parsingResult.errors.forEach { println("at ${it.position} ${it.message}") }
 }
